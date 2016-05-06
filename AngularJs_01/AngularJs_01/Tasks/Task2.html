@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html ng-app="toDoList" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ToDo List (Task2)</title>
+    <script src="../Libraries/angular.js"></script>
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <script src="todo.js"></script>
+    <script>
+        Date.prototype.toJSONLocal = (function () {
+            function addZ(n) {
+                return (n < 10 ? '0' : '') + n;
+            }
+            return function () {
+                return this.getFullYear() + '-' +
+                       addZ(this.getMonth() + 1) + '-' +
+                       addZ(this.getDate()) + 'T' +
+                       addZ(this.getHours()) + ':' +
+                       addZ(this.getMinutes());
+            };
+        }());
+
+        var toDoList = angular.module("toDoList", []).directive('focus',
+                function ($timeout) {
+                    return {
+                        scope: {
+                            trigger: '@focus'
+                        },
+                        link: function (scope, element) {
+                            scope.$watch('trigger', function (value) {
+                                if (value === "true") {
+                                    $timeout(function () {
+                                        element[0].focus();
+                                    });
+                                }
+                            });
+                        }
+                    };
+                });
+
+        toDoList.controller("toDoListController", function ($scope) {
+            $scope.readData = todoModel.read();
+            $scope.data = todoModel.data;
+
+
+            $scope.clickHandlerAdd = function () {
+                var date = $scope.dateTime.toJSONLocal();
+                todoModel.addItem($scope.name, date, $scope.description, $scope.completed);
+                todoModel.save();
+                $scope.name = '';
+                $scope.description = '';
+                $scope.completed = false;
+            };
+
+            $scope.onBlurHandler = function (id, data) {
+                todoModel.updateItem(id, data);
+                todoModel.save();
+                $scope.selectedNameRowId = undefined;
+                $scope.selectedDescriptionRowId = undefined;
+            };
+
+            $scope.clickHandlerDelete = function (id) {
+                todoModel.removeItem(id);
+                todoModel.save();
+            };
+
+            $scope.clickHandlerEdit = function (id, num) {
+                switch (num) {
+                    case 0:
+                        $scope.selectedNameRowId = id;
+                        $scope.selectedDescriptionRowId = undefined;
+                        break;
+                    case 1:
+                        $scope.selectedDescriptionRowId = id;
+                        $scope.selectedNameRowId = undefined;
+                        break;
+                }
+            };
+
+
+            var currentDate = new Date();
+            $scope.dateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMinutes());
+            $scope.name = '';
+            $scope.description = '';
+            $scope.completed = false;
+            $scope.selectedNameRowId = undefined;
+            $scope.selectedDescriptionRowId = undefined;
+        });
+
+
+    </script>
+
+</head>
+<body ng-controller="toDoListController">
+
+    <div class="container">
+        <div class="panel panel-default">
+            <h3 class="panel-heading">ToDo List</h3>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th style="text-align: center;">Completed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat="data in readData">
+                        <td ng-if="selectedNameRowId != data.id" ng-click="clickHandlerEdit(data.id, 0)">{{data.name}}</td>
+                        <td ng-if="selectedNameRowId == data.id">
+                            <input type="text" class="form-control" ng-model="data.name" focus="true" ng-blur="onBlurHandler(data.id, data)" />
+                        </td>
+
+                        <td ng-if="selectedDescriptionRowId != data.id" ng-click="clickHandlerEdit(data.id, 1)">{{data.description}}</td>
+                        <td ng-if="selectedDescriptionRowId == data.id">
+                            <input type="text" class="form-control" ng-model="data.description" focus="true" ng-blur="onBlurHandler(data.id, data)" />
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" ng-model="data.dateTime" ng-blur="onBlurHandler(data.id, data)" />
+                        </td>
+
+                        <td style="text-align: center; vertical-align: middle;">
+                            <input type="checkbox" class="form-inline" ng-model="data.completed" ng-click="onBlurHandler(data.id, data)" />
+                        </td>
+
+                        <td ng-mouseenter="options=true" ng-mouseleave="options=false">
+                            <span ng-show="options" ng-click="clickHandlerDelete(data.id)" class="glyphicon glyphicon-remove" title="delete"></span>
+                            <span ng-hide="options" class="glyphicon glyphicon-remove" style="opacity:0"></span>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="well">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="datetime-local" class="form-control" ng-model="dateTime" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea type="text" class="form-control" ng-model="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Completed</label>
+                        <input type="checkbox" class="form-inline" ng-model="completed">
+                    </div>
+                    <button class="btn btn-primary" ng-click="clickHandlerAdd()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

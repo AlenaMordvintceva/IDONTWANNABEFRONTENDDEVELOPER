@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="taskOne">
+<head>
+    <title>Task 1</title>
+    <script src="../Libraries/angular.js"></script>
+    <script src="model.js"></script>
+
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+</head>
+<body ng-controller="FirstTaskController">
+    <div class="container">
+        <div class="panel panel-default">
+            <h1 class="panel-heading">
+                Kek
+            </h1>
+            <div class="panel-body">
+                <div class="well" ng-repeat="data in data">
+                    <div>
+                        <h3>
+                            {{data.title}}
+                        </h3>
+                    </div>
+                    <div>
+                        <h5>
+                            {{data.published}}
+                        </h5>
+                    </div>
+                    <div>
+                        <h5>
+                            {{data.description}}
+                        </h5>                        
+                    </div>
+                    <div>                       
+                        <a class="btn btn-default btn-primary" href="{{data.link}}">Читать дальше</a>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
