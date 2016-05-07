@@ -29,9 +29,7 @@
         console.log('updated:', id);
     }
 
-    function _save() {
-        // второй параметр - функция, которая удаляет специальное свойство добавляемое angularJS для отслеживания дубликатов 
-        // http://mutablethought.com/2013/04/25/angular-js-ng-repeat-no-longer-allowing-duplicates/
+    function _save() {       
         window.localStorage["tasks"] = JSON.stringify(_data, function (key, val) {
             if (key == '$$hashKey') {
                 return undefined;
@@ -40,12 +38,22 @@
         });
     }
 
+    function dateStringToObject(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].duedate = new Date(data[i].duedate);
+        }
+        return data;
+    }
+
+   
     function _read() {
         var temp = window.localStorage["tasks"]
 
         if (!temp) _data = [];
-        else _data = JSON.parse(temp);
-
+        else {
+            _data = JSON.parse(temp);
+            dateStringToObject(_data);
+        }
         return _data;
     }
 

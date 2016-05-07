@@ -41,12 +41,9 @@
 
         toDoList.controller("toDoListController", function ($scope) {
             $scope.readData = todoModel.read();
-            $scope.data = todoModel.data;
-
 
             $scope.clickHandlerAdd = function () {
-                var date = $scope.dateTime.toJSONLocal();
-                todoModel.addItem($scope.name, date, $scope.description, $scope.completed);
+                todoModel.addItem($scope.name, $scope.dateTime, $scope.description, $scope.completed);
                 todoModel.save();
                 $scope.name = '';
                 $scope.description = '';
@@ -120,7 +117,7 @@
                         </td>
 
                         <td>
-                            <input type="text" class="form-control" ng-model="data.dateTime" ng-blur="onBlurHandler(data.id, data)" />
+                            <input type="datetime-local" class="form-control" ng-model="data.duedate" ng-blur="onBlurHandler(data.id, data)" />
                         </td>
 
                         <td style="text-align: center; vertical-align: middle;">
