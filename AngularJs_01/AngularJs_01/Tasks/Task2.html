@@ -75,6 +75,18 @@
                 }
             };
 
+            $scope.clickHandlerShowDescription = function (show) {
+                if (show == 'Show description') {
+                    $scope.url = "_descriptionPartial.html";
+                    $scope.showDescription = 'Hide description';
+                    $scope.showDescriptionClass = true;
+                }
+                else {
+                    $scope.url = undefined;
+                    $scope.showDescription = 'Show description';
+                    $scope.showDescriptionClass = false;
+                }
+            };
 
             var currentDate = new Date();
             $scope.dateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMinutes());
@@ -83,73 +95,78 @@
             $scope.completed = false;
             $scope.selectedNameRowId = undefined;
             $scope.selectedDescriptionRowId = undefined;
+            $scope.showDescription = 'Show description';
+            $scope.showDescriptionClass = false;
         });
-
-
     </script>
 
 </head>
 <body ng-controller="toDoListController">
-
     <div class="container">
         <div class="panel panel-default">
             <h3 class="panel-heading">ToDo List</h3>
             <div class="panel-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th style="text-align: center;">Completed</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tr ng-repeat="data in readData">
-                        <td ng-if="selectedNameRowId != data.id" ng-click="clickHandlerEdit(data.id, 0)">{{data.name}}</td>
-                        <td ng-if="selectedNameRowId == data.id">
-                            <input type="text" class="form-control" ng-model="data.name" focus="true" ng-blur="onBlurHandler(data.id, data)" />
-                        </td>
-
-                        <td ng-if="selectedDescriptionRowId != data.id" ng-click="clickHandlerEdit(data.id, 1)">{{data.description}}</td>
-                        <td ng-if="selectedDescriptionRowId == data.id">
-                            <input type="text" class="form-control" ng-model="data.description" focus="true" ng-blur="onBlurHandler(data.id, data)" />
-                        </td>
-
-                        <td>
-                            <input type="datetime-local" class="form-control" ng-model="data.duedate" ng-blur="onBlurHandler(data.id, data)" />
-                        </td>
-
-                        <td style="text-align: center; vertical-align: middle;">
-                            <input type="checkbox" class="form-inline" ng-model="data.completed" ng-click="onBlurHandler(data.id, data)" />
-                        </td>
-
-                        <td ng-mouseenter="options=true" ng-mouseleave="options=false">
-                            <span ng-show="options" ng-click="clickHandlerDelete(data.id)" class="glyphicon glyphicon-remove" title="delete"></span>
-                            <span ng-hide="options" class="glyphicon glyphicon-remove" style="opacity:0"></span>
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="well">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" ng-model="name" />
-                    </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="datetime-local" class="form-control" ng-model="dateTime" />
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea type="text" class="form-control" ng-model="description"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Completed</label>
-                        <input type="checkbox" class="form-inline" ng-model="completed">
-                    </div>
-                    <button class="btn btn-primary" ng-click="clickHandlerAdd()">Add</button>
+                <div class="panel-heading pull-right">
+                    <button class="btn btn-primary" ng-click="clickHandlerShowDescription(showDescription)">{{showDescription}}</button>
                 </div>
+            </div>
+            <div class="col-lg-12">
+                <div ng-class="showDescriptionClass ? 'col-lg-10' : ''">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th style="text-align: center;">Completed</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="data in readData">
+                                    <td ng-if="selectedNameRowId != data.id" ng-click="clickHandlerEdit(data.id, 0)">{{data.name}}</td>
+                                    <td ng-if="selectedNameRowId == data.id">
+                                        <input type="text" class="form-control" ng-model="data.name" focus="true" ng-blur="onBlurHandler(data.id, data)" />
+                                    </td>
+
+                                    <td>
+                                        <input type="datetime-local" class="form-control" ng-model="data.duedate" ng-blur="onBlurHandler(data.id, data)" />
+                                    </td>
+
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <input type="checkbox" class="form-inline" ng-model="data.completed" ng-click="onBlurHandler(data.id, data)" />
+                                    </td>
+
+                                    <td ng-mouseenter="options=true" ng-mouseleave="options=false">
+                                        <span ng-show="options" ng-click="clickHandlerDelete(data.id)" class="glyphicon glyphicon-remove" title="delete"></span>
+                                        <span ng-hide="options" class="glyphicon glyphicon-remove" style="opacity:0"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <span ng-include="url"></span>
+            </div>
+            <div class="row"></div>
+            <div class="well">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" ng-model="name" />
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="datetime-local" class="form-control" ng-model="dateTime" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea type="text" class="form-control" ng-model="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Completed</label>
+                    <input type="checkbox" class="form-inline" ng-model="completed">
+                </div>
+                <button class="btn btn-primary" ng-click="clickHandlerAdd()">Add</button>
             </div>
         </div>
     </div>

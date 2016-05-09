@@ -1,0 +1,19 @@
+﻿<div class="col-lg-2">
+    <div class="table-responsive">
+        <table class="table" style="display:inline">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height:51px" ng-repeat="data in readData">
+                    <td  ng-if="selectedDescriptionRowId != data.id" ng-click="clickHandlerEdit(data.id, 1)"> {{data.description}}</td>
+                    <td ng-if="selectedDescriptionRowId == data.id">
+                        <input type="text" class="form-control" ng-model="data.description" focus="true" ng-blur="onBlurHandler(data.id, data)" />
+                    </td>
+                </tr>
+            <tbody>
+        </table>
+    </div>
+</div>

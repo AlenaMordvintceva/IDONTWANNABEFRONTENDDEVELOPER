@@ -78,6 +78,7 @@
     <Content Include="Libraries\angular.js" />
     <Content Include="Libraries\bootstrap-theme.css" />
     <Content Include="Libraries\bootstrap.css" />
+    <Content Include="Tasks\_descriptionPartial.html" />
     <Content Include="Tasks\model.js" />
     <Content Include="Tasks\Task1.html" />
     <Content Include="Tasks\Task2.html" />
