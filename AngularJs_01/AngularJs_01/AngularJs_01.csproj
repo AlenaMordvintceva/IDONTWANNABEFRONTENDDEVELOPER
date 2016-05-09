@@ -78,11 +78,13 @@
     <Content Include="Libraries\angular.js" />
     <Content Include="Libraries\bootstrap-theme.css" />
     <Content Include="Libraries\bootstrap.css" />
-    <Content Include="Tasks\_descriptionPartial.html" />
-    <Content Include="Tasks\model.js" />
-    <Content Include="Tasks\Task1.html" />
-    <Content Include="Tasks\Task2.html" />
-    <Content Include="Tasks\todo.js" />
+    <Content Include="Tasks\Task2\toDoListController.js" />
+    <Content Include="Tasks\Task3\Task3.html" />
+    <Content Include="Tasks\Task2\_descriptionPartial.html" />
+    <Content Include="Tasks\Task1\model.js" />
+    <Content Include="Tasks\Task1\Task1.html" />
+    <Content Include="Tasks\Task2\Task2.html" />
+    <Content Include="Tasks\Task2\todo.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
